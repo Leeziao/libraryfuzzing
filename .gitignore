@@ -1,0 +1,8 @@
+*
+!**/*.go
+!**/*.md
+!**/.gitkeep
+!**/*.mod
+!**/*.sum
+!.gitignore
+.vscode
