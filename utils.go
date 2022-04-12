@@ -6,6 +6,7 @@ const (
 	COLOR_BEG = iota
 	GREEN
 	RED
+	YELLOW
 	YELLOW_UNDERLINE
 	DEFAULT
 	COLOR_END
@@ -14,6 +15,7 @@ const (
 var COLOR_MAP = map[int]string{
 	GREEN:   				"\033[32m",
 	RED:     				"\033[31m",
+	YELLOW :				"\033[33m",
 	YELLOW_UNDERLINE :		"\033[4;33m",
 	DEFAULT: "\033[0m",
 }

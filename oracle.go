@@ -145,13 +145,13 @@ func (o *Oracle) InspectCondition(cond ast.Expr) {
 			printer.Fprint(&buf, o.fset, n.X)
 			buf.WriteString(fmt.Sprintf(".%s", n.Sel.Name))
 			
-			PrintColoredText(fmt.Sprintf("\t%s (kept=%v)\n", buf.String(), is_kept), YELLOW_UNDERLINE)
+			PrintColoredText(fmt.Sprintf("\t%s (kept=%v)\n", buf.String(), is_kept), YELLOW)
 			return false
 		case *ast.BasicLit:
-			PrintColoredText(fmt.Sprintf("\t%s (kept=%v)\n", n.Value, is_kept), YELLOW_UNDERLINE)
+			PrintColoredText(fmt.Sprintf("\t%s (kept=%v)\n", n.Value, is_kept), YELLOW)
 		case *ast.Ident:
 			is_kept := o.IsExprKept(n)
-			PrintColoredText(fmt.Sprintf("\t%s (kept=%v)\n", n.Name, is_kept), YELLOW_UNDERLINE)
+			PrintColoredText(fmt.Sprintf("\t%s (kept=%v)\n", n.Name, is_kept), YELLOW)
 		}
 		return true
 	})

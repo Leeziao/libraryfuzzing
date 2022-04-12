@@ -68,15 +68,27 @@ func (c *Context) GetPackage() *packages.Package {
 		panic(fmt.Sprintf("Package %v not found", flag.Args()))
 	}
 
-	if len(pkgs) != 4 {
-		paths := make([]string, len(pkgs))
-		for _, p := range pkgs {
-			paths = append(paths, p.PkgPath)
-		}
-		panic(fmt.Sprintf("Cannot build multiple packages, %q resolved to %v", pkg_name, strings.Join(paths, ", ")))
+	// if len(pkgs) != 4 {
+	// 	paths := make([]string, len(pkgs))
+	// 	for _, p := range pkgs {
+	// 		paths = append(paths, p.PkgPath)
+	// 	}
+	// 	panic(fmt.Sprintf("Cannot build multiple packages, %q resolved to %v", pkg_name, strings.Join(paths, ", ")))
+	// }
+
+
+	// FIXME: handle different package structure
+	if len(pkgs) == 0 {
+		panic("No Package located")
 	}
 
-	pkg := pkgs[1]
+	var pkg *packages.Package
+	if len(pkgs) >= 2 {
+		pkg = pkgs[1]
+	} else {
+		pkg = pkgs[0]
+	}
+
 	for _, name := range pkg.CompiledGoFiles {
 		fmt.Printf("\t- %s\n", name)
 	}
