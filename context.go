@@ -62,12 +62,13 @@ func (c *Context) GetPackage() *packages.Package {
 
 	cfg := &packages.Config{
 				Mode: packages.LoadAllSyntax,
-				Tests: false}
+				Tests: true}
 	pkgs, err := packages.Load(cfg, pkg_name)
 	if err != nil {
 		panic(fmt.Sprintf("Package %v not found", flag.Args()))
 	}
-	if len(pkgs) != 1 {
+
+	if len(pkgs) != 4 {
 		paths := make([]string, len(pkgs))
 		for _, p := range pkgs {
 			paths = append(paths, p.PkgPath)
@@ -75,7 +76,7 @@ func (c *Context) GetPackage() *packages.Package {
 		panic(fmt.Sprintf("Cannot build multiple packages, %q resolved to %v", pkg_name, strings.Join(paths, ", ")))
 	}
 
-	pkg := pkgs[0]
+	pkg := pkgs[1]
 	for _, name := range pkg.CompiledGoFiles {
 		fmt.Printf("\t- %s\n", name)
 	}

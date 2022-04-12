@@ -34,6 +34,13 @@ func IsFuncQualified(f *ast.FuncDecl, p *packages.Package) bool {
 		panic(fmt.Sprintf("%s cannot be converted into *types.Signature", obj_f.String()))
 	}
 
+	if *flagFunc != "" {
+		if f_name == *flagFunc {
+			return true
+		}
+		return false
+	}
+
 	// Filter out methods
 	if sig.Recv() != nil {
 		return false

@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"go/types"
 )
 
 var (
@@ -39,9 +41,21 @@ func main() {
 	tgt_func := context.ExtractFunctionFromPackage()
 
 	for _, f := range tgt_func {
+		tgt_pkg := context.tgt_pkg
+		tgt_info := tgt_pkg.TypesInfo
+		f_obj := tgt_info.Defs[f.Name]
+		f_func, ok := f_obj.(*types.Func)
+
+		if !ok {
+			panic(fmt.Sprintf("Function Object of %s not found", f.Name.Name))
+		}
+
+
 		oracle := Oracle{f_ast: f,
-						 fset: context.tgt_pkg.Fset,
-						 pkg: context.tgt_pkg,}
+						 fset: tgt_pkg.Fset,
+						 pkg: tgt_pkg,
+						 f_scope: f_func.Scope(),}
 		oracle.AnalyseFunction()
+		break
 	}
 }
