@@ -43,7 +43,6 @@ func (o *Oracle) Visit(node ast.Node) ast.Visitor {
 		buf.WriteString("\n")
 		PrintColoredText(buf.String(), GREEN)
 
-		// ast.Print(nil, st.Cond)
 		// ast.Walk(o, st.Body)
 		// fmt.Printf("%s\n", st.Cond)
 	}
@@ -54,6 +53,8 @@ func (o *Oracle) Visit(node ast.Node) ast.Visitor {
 // ret2 := if current node is modified to be always accepted
 func (o *Oracle) TraverseCondition(expr ast.Expr) (ast.Expr, bool) {
 	switch expr := expr.(type) {
+	case *ast.CallExpr:
+		return expr, false
 	case *ast.Ident:
 		is_kept := o.IsExprKept(expr)
 		if !is_kept {
@@ -62,7 +63,6 @@ func (o *Oracle) TraverseCondition(expr ast.Expr) (ast.Expr, bool) {
 		return expr, false
 	case *ast.BasicLit:
 		return ast.NewIdent("true"), true
-		return expr, false
 	case *ast.BinaryExpr:
 		x_expr, x_replaced := o.TraverseCondition(expr.X)
 		y_expr, y_replaced := o.TraverseCondition(expr.Y)
@@ -114,6 +114,8 @@ func (o *Oracle) TraverseCondition(expr ast.Expr) (ast.Expr, bool) {
 				return expr, false
 			}
 		}
+		expr.X = sub_expr
+		return expr, false
 	case *ast.StarExpr:
 		_, sub_replaced := o.TraverseCondition(expr.X)
 		if sub_replaced {
@@ -124,7 +126,8 @@ func (o *Oracle) TraverseCondition(expr ast.Expr) (ast.Expr, bool) {
 		if sub_replaced {
 			return ast.NewIdent("true"), true
 		}
-		return sub_expr, false
+		expr.X = sub_expr
+		return expr, false
 	// default:
 	// 	panic("Other undefined cases")
 	}
